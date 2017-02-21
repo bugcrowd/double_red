@@ -13,7 +13,6 @@ config :double_red, DoubleRed.Endpoint,
   check_origin: false,
   watchers: []
 
-
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
@@ -29,3 +28,6 @@ config :double_red, DoubleRed.Repo,
   database: "double_red_dev",
   hostname: "localhost",
   pool_size: 10
+
+# ask @paulfri if you need this file
+import_config "dev.secret.exs"

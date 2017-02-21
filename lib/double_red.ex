@@ -12,8 +12,13 @@ defmodule DoubleRed do
       supervisor(DoubleRed.Repo, []),
       # Start the endpoint when the application starts
       supervisor(DoubleRed.Endpoint, []),
-      # Start your own worker by calling: DoubleRed.Worker.start_link(arg1, arg2, arg3)
-      # worker(DoubleRed.Worker, [arg1, arg2, arg3]),
+
+      worker(Slack.Bot, [
+        SlackRtm,
+        [],
+        Application.get_env(:slack, :api_token),
+        %{name: :slack}
+      ])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
