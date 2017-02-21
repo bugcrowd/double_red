@@ -4,7 +4,8 @@ defmodule DoubleRed.WaftController do
   alias DoubleRed.Waft
 
   def index(conn, _params) do
-    wafts = Repo.all(Waft)
+    wafts = Repo.all(from Waft, order_by: [desc: :inserted_at])
+
     render(conn, "index.json", wafts: wafts)
   end
 
