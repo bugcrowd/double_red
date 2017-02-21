@@ -13,6 +13,23 @@ defmodule DoubleRed.Status do
   end
 
   @doc """
+  Indicates whether the most recent two wafts have different occupied statuses.
+
+  Used for determining whether to change the presence status on Slack.
+  """
+  def changed? do
+    wafts = Repo.all(
+      from x in Waft,
+      order_by: [desc: x.inserted_at],
+      limit: 2
+    )
+
+    occupied?(List.first(wafts)) != occupied?(List.last(wafts))
+  rescue
+    NoWaftDataError -> true
+  end
+
+  @doc """
   Get the current occupancy status for all locations.
   """
   def now do

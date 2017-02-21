@@ -2,6 +2,7 @@ defmodule DoubleRed.WaftController do
   use DoubleRed.Web, :controller
 
   alias DoubleRed.Waft
+  alias DoubleRed.Status
 
   def index(conn, _params) do
     wafts = Repo.all(from Waft, order_by: [desc: :inserted_at])
@@ -14,6 +15,11 @@ defmodule DoubleRed.WaftController do
 
     case Repo.insert(changeset) do
       {:ok, waft} ->
+        GenServer.cast(
+          DoubleRed.SlackPresence,
+          {:update, Status.occupied?(waft)}
+        )
+
         conn
         |> put_status(:created)
         |> put_resp_header("location", waft_path(conn, :show, waft))

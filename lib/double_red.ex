@@ -18,7 +18,9 @@ defmodule DoubleRed do
         [],
         Application.get_env(:slack, :api_token),
         %{name: :slack}
-      ])
+      ]),
+
+      worker(DoubleRed.SlackPresence, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
