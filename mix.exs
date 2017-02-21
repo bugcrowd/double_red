@@ -35,7 +35,8 @@ defmodule DoubleRed.Mixfile do
      {:phoenix_ecto, "~> 3.0"},
      {:postgrex, ">= 0.0.0"},
      {:gettext, "~> 0.11"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:credo, "~> 0.5", only: [:dev, :test]}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
