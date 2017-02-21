@@ -22,6 +22,18 @@ defmodule DoubleRed.StatusTest do
     end
   end
 
+  test "#changed? when occupied?() has changed returns true" do
+    assert Status.changed?(%Waft{red: 0}, %Waft{red: 65535})
+  end
+
+  test "#changed? when occupied?() has not changed returns false" do
+    refute Status.changed?(%Waft{red: 0}, %Waft{red: 0})
+  end
+
+  test "changed? with only one waft returns true" do
+    assert Status.changed?(%Waft{red: 0}, nil)
+  end
+
   test "#now returns correct response with no waft data" do
     assert %{0 => nil} = Status.now
   end

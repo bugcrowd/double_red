@@ -24,7 +24,12 @@ defmodule DoubleRed.Status do
       limit: 2
     )
 
-    occupied?(List.first(wafts)) != occupied?(List.last(wafts))
+    # TODO: there has to be a cuter way to do this
+    changed? List.first(wafts), List.last(wafts)
+  end
+
+  def changed?(waft1, waft2) do
+    occupied?(waft1) != occupied?(waft2)
   rescue
     NoWaftDataError -> true
   end

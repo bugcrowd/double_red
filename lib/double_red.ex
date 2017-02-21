@@ -8,20 +8,23 @@ defmodule DoubleRed do
 
     # Define workers and child supervisors to be supervised
     children = [
-      # Start the Ecto repository
       supervisor(DoubleRed.Repo, []),
-      # Start the endpoint when the application starts
       supervisor(DoubleRed.Endpoint, []),
-
-      worker(Slack.Bot, [
-        SlackRtm,
-        [],
-        Application.get_env(:slack, :api_token),
-        %{name: :slack}
-      ]),
-
       worker(DoubleRed.SlackPresence, [])
     ]
+
+    # Don't start the Slack.Bot app in test since it keeps a persistent
+    # websocket connection
+    children = children ++ (unless Mix.env == :test do
+        [worker(Slack.Bot, [
+          SlackRtm,
+          [],
+          Application.get_env(:slack, :api_token),
+          %{name: :slack}
+        ])]
+      else
+        []
+      end)
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options

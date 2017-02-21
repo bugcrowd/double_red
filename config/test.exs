@@ -9,6 +9,9 @@ config :double_red, DoubleRed.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
+# Print only warnings and errors during test
+config :slack, api_token: "whatever"
+
 # Configure your database
 config :double_red, DoubleRed.Repo,
   adapter: Ecto.Adapters.Postgres,
