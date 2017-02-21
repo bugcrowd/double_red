@@ -19,7 +19,7 @@ defmodule DoubleRed.Mixfile do
   def application do
     [mod: {DoubleRed, []},
      applications: [:phoenix, :phoenix_pubsub, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :slack]]
   end
 
   # Specifies which paths to compile per environment.
@@ -36,6 +36,7 @@ defmodule DoubleRed.Mixfile do
      {:postgrex, ">= 0.0.0"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
+     {:slack, "~> 0.10.0"},
      {:credo, "~> 0.5", only: [:dev, :test]}]
   end
 
