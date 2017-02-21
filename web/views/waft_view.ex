@@ -12,7 +12,7 @@ defmodule DoubleRed.WaftView do
   def render("waft.json", %{waft: waft}) do
     %{id: waft.id,
       temperature: waft.temperature,
-      lumens: waft.lumens,
+      brightness: waft.brightness,
       red: waft.red,
       green: waft.green,
       blue: waft.blue}

@@ -3,14 +3,14 @@ defmodule DoubleRed.Waft do
   A Waft is a single reading from the DoubleRed hardware sensor.
 
   The sensor provides red, green and blue color values, as well as color
-  temperature and brightness (lumen) readings.
+  temperature (kelvin) and brightness (lumens) readings.
   """
 
   use DoubleRed.Web, :model
 
   schema "wafts" do
     field :temperature, :integer
-    field :lumens, :integer
+    field :brightness, :integer
     field :red, :integer
     field :green, :integer
     field :blue, :integer
@@ -23,34 +23,34 @@ defmodule DoubleRed.Waft do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:temperature, :lumens, :red, :green, :blue])
-    |> validate_required([:temperature, :lumens, :red, :green, :blue])
+    |> cast(params, [:temperature, :brightness, :red, :green, :blue])
+    |> validate_required([:temperature, :brightness, :red, :green, :blue])
     |> check_constraint(:temperature, name: :positive_temperature,
-      message: "temperature must be positive"
+      message: "temperature must be at least 0"
     )
     |> check_constraint(:temperature, name: :valid_temperature,
       message: "temperature must be below 65536"
     )
-    |> check_constraint(:lumens, name: :positive_lumens,
-      message: "lumens must be positive"
+    |> check_constraint(:brightness, name: :positive_brightness,
+      message: "brightness must be at least 0"
     )
-    |> check_constraint(:lumens, name: :valid_lumens,
-      message: "lumens must be below 65536"
+    |> check_constraint(:brightness, name: :valid_brightness,
+      message: "brightness must be below 65536"
     )
     |> check_constraint(:red, name: :positive_red,
-      message: "red must be positive"
+      message: "red must be at least 0"
     )
     |> check_constraint(:red, name: :valid_red,
       message: "red must be below 65536"
     )
     |> check_constraint(:green, name: :positive_green,
-      message: "green must be positive"
+      message: "green must be at least 0"
     )
     |> check_constraint(:green, name: :valid_green,
       message: "green must be below 65536"
     )
     |> check_constraint(:blue, name: :positive_blue,
-      message: "blue must be positive"
+      message: "blue must be at least 0"
     )
     |> check_constraint(:blue, name: :valid_blue,
       message: "blue must be below 65536"

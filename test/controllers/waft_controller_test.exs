@@ -2,7 +2,7 @@ defmodule DoubleRed.WaftControllerTest do
   use DoubleRed.ConnCase
 
   alias DoubleRed.Waft
-  @valid_attrs %{blue: 42, green: 42, lumens: 42, red: 42, temperature: 42}
+  @valid_attrs %{blue: 42, green: 42, brightness: 42, red: 42, temperature: 42}
   @invalid_attrs %{temperature: -1}
 
   setup %{conn: conn} do
@@ -19,7 +19,7 @@ defmodule DoubleRed.WaftControllerTest do
     conn = get conn, waft_path(conn, :show, waft)
     assert json_response(conn, 200)["data"] == %{"id" => waft.id,
       "temperature" => waft.temperature,
-      "lumens" => waft.lumens,
+      "brightness" => waft.brightness,
       "red" => waft.red,
       "green" => waft.green,
       "blue" => waft.blue}

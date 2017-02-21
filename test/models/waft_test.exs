@@ -3,8 +3,8 @@ defmodule DoubleRed.WaftTest do
 
   alias DoubleRed.Waft
 
-  @valid_attrs %{blue: 42, green: 42, lumens: 42, red: 42, temperature: 42}
-  @invalid_attrs %{blue: -1, green: -1, lumens: -1, red: -1, temperature: -1}
+  @valid_attrs %{blue: 42, green: 42, brightness: 42, red: 42, temperature: 42}
+  @invalid_attrs %{blue: -1, green: -1, brightness: -1, red: -1, temperature: -1}
   @missing_attrs %{}
 
   test "changeset with valid attributes" do
