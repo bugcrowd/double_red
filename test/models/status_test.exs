@@ -22,7 +22,25 @@ defmodule DoubleRed.StatusTest do
     end
   end
 
-  test "#now returns occupied status for all locations" do
+  test "#now returns correct response with no waft data" do
+    assert %{0 => nil} = Status.now
+  end
+
+  test "#now returns occupied status for all locations, when occupied" do
+    Repo.insert! Waft.changeset(%Waft{}, %{
+      temperature: 0,
+      brightness: 0,
+      red: 65535,
+      green: 0,
+      blue: 0
+    })
+
+    # `0` is the fake location identifier, since we only have one
+    # location for now
+    assert %{0 => true} = Status.now
+  end
+
+  test "#now returns occupied status for all locations, when unoccupied" do
     Repo.insert! Waft.changeset(%Waft{}, %{
       temperature: 0,
       brightness: 0,
@@ -31,6 +49,8 @@ defmodule DoubleRed.StatusTest do
       blue: 0
     })
 
-    assert [false] = Status.now
+    # `0` is the fake location identifier, since we only have one
+    # location for now
+    assert %{0 => false} = Status.now
   end
 end

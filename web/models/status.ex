@@ -18,8 +18,12 @@ defmodule DoubleRed.Status do
   def now do
     locations = [0]
 
-    Enum.map(locations, fn(location_id) ->
-      now(location_id)
+    locations
+    |> Enum.map(fn(location_id) ->
+      %{location_id => now(location_id)}
+    end)
+    |> Enum.reduce(%{}, fn(status, acc) ->
+      Map.merge(acc, status)
     end)
   end
 
@@ -32,6 +36,8 @@ defmodule DoubleRed.Status do
     waft = Repo.one(from x in Waft, order_by: [desc: x.inserted_at], limit: 1)
 
     occupied?(waft)
+  rescue
+    NoWaftDataError -> nil
   end
 
   @doc """

@@ -9,5 +9,6 @@ defmodule DoubleRed.Router do
     pipe_through :api
 
     resources "/wafts", WaftController, except: [:new, :edit]
+    resources "/status", StatusController, only: [:show], singleton: true
   end
 end
