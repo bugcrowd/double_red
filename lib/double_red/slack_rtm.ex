@@ -31,10 +31,10 @@ defmodule DoubleRed.SlackRtm do
 
       Logger.info "Sending the welcome message to #{username}"
 
-      send_message @welcome_message, message.channel, slack
-
       if message.text == "status" do
         send_status message.channel, slack
+      else
+        send_message @welcome_message, message.channel, slack
       end
     end
 
