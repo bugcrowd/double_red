@@ -8,7 +8,9 @@ defmodule DoubleRed.Router do
   scope "/api", DoubleRed do
     pipe_through :api
 
-    resources "/wafts", WaftController, except: [:new, :edit]
+    resources "/locations", LocationController do
+      resources "/wafts", WaftController, except: [:new, :edit]
+    end
     resources "/status", StatusController, only: [:show], singleton: true
   end
 end

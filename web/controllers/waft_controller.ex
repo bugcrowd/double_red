@@ -2,16 +2,31 @@ defmodule DoubleRed.WaftController do
   use DoubleRed.Web, :controller
 
   alias DoubleRed.Waft
+  alias DoubleRed.Location
   alias DoubleRed.Status
 
+  plug :find_location
+
+  defp find_location(conn, _opts) do
+    conn
+    |> assign(:location, Repo.get!(Location, conn.params["location_id"]))
+  end
+
   def index(conn, _params) do
-    wafts = Repo.all(from Waft, order_by: [desc: :inserted_at])
+    wafts =
+      conn.assigns[:location]
+      |> assoc(:wafts)
+      |> Repo.all(order_by: [desc: :inserted_at])
 
     render(conn, "index.json", wafts: wafts)
   end
 
   def create(conn, %{"waft" => waft_params}) do
-    changeset = Waft.changeset(%Waft{}, waft_params)
+    location = conn.assigns.location
+    changeset =
+      location
+        |> Ecto.build_assoc(:wafts)
+        |> Waft.changeset(waft_params)
 
     case Repo.insert(changeset) do
       {:ok, waft} ->
@@ -22,7 +37,7 @@ defmodule DoubleRed.WaftController do
 
         conn
         |> put_status(:created)
-        |> put_resp_header("location", waft_path(conn, :show, waft))
+        |> put_resp_header("location", location_waft_path(conn, :show, location, waft))
         |> render("show.json", waft: waft)
       {:error, changeset} ->
         conn
@@ -32,12 +47,18 @@ defmodule DoubleRed.WaftController do
   end
 
   def show(conn, %{"id" => id}) do
-    waft = Repo.get!(Waft, id)
+    waft =
+      conn.assigns[:location]
+      |> assoc(:wafts)
+      |> Repo.get(id)
     render(conn, "show.json", waft: waft)
   end
 
   def update(conn, %{"id" => id, "waft" => waft_params}) do
-    waft = Repo.get!(Waft, id)
+    waft =
+      conn.assigns[:location]
+      |> assoc(:wafts)
+      |> Repo.get(id)
     changeset = Waft.changeset(waft, waft_params)
 
     case Repo.update(changeset) do
@@ -51,7 +72,10 @@ defmodule DoubleRed.WaftController do
   end
 
   def delete(conn, %{"id" => id}) do
-    waft = Repo.get!(Waft, id)
+    waft =
+      conn.assigns[:location]
+      |> assoc(:wafts)
+      |> Repo.get(id)
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
