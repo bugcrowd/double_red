@@ -2,16 +2,23 @@ defmodule DoubleRed.StatusTest do
   use DoubleRed.ModelCase
 
   alias DoubleRed.Status
+  alias DoubleRed.Location
   alias DoubleRed.Waft
 
-  test "#occupied? with a 'red' waft returns true" do
-    waft = %Waft{red: 65535}
+  test "#occupied? with red more than 20% greater than green returns true" do
+    waft = %Waft{red: 12001, green: 10000}
 
     assert Status.occupied?(waft)
   end
 
-  test "#occupied? with a non-'red' waft returns false" do
-    waft = %Waft{red: 0}
+  test "#occupied? with red less than or equal to 20% greater than green returns false" do
+    waft = %Waft{red: 12000, green: 10000}
+
+    refute Status.occupied?(waft)
+  end
+
+  test "#occupied? with a greener waft returns false" do
+    waft = %Waft{red: 10000, green: 10001}
 
     refute Status.occupied?(waft)
   end
@@ -23,46 +30,47 @@ defmodule DoubleRed.StatusTest do
   end
 
   test "#changed? when occupied?() has changed returns true" do
-    assert Status.changed?(%Waft{red: 0}, %Waft{red: 65535})
+    waft1 = %Waft{red: 12001, green: 10000}
+    waft2 = %Waft{red: 12000, green: 10000}
+    assert Status.changed?(waft1, waft2)
   end
 
   test "#changed? when occupied?() has not changed returns false" do
-    refute Status.changed?(%Waft{red: 0}, %Waft{red: 0})
+    waft1 = %Waft{red: 12001, green: 10000}
+    waft2 = %Waft{red: 12001, green: 10000}
+    refute Status.changed?(waft1, waft2)
   end
 
   test "changed? with only one waft returns true" do
-    assert Status.changed?(%Waft{red: 0}, nil)
+    waft1 = %Waft{red: 12001, green: 10000}
+    assert Status.changed?(waft1, nil)
   end
 
   test "#now returns correct response with no waft data" do
-    assert %{0 => nil} = Status.now
+    assert Status.now == %{}
   end
 
   test "#now returns occupied status for all locations, when occupied" do
-    Repo.insert! Waft.changeset(%Waft{}, %{
-      temperature: 0,
-      brightness: 0,
-      red: 65535,
-      green: 0,
-      blue: 0
-    })
+    location = Location.changeset(%Location{}, %{name: "left", zone: 0})
+      |> Repo.insert!
 
-    # `0` is the fake location identifier, since we only have one
-    # location for now
-    assert %{0 => true} = Status.now
+    waft =
+      Ecto.build_assoc(location, :wafts)
+      |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12001, green: 10000, blue: 0})
+      |> Repo.insert!
+
+    assert Status.now == %{location.id => true}
   end
 
   test "#now returns occupied status for all locations, when unoccupied" do
-    Repo.insert! Waft.changeset(%Waft{}, %{
-      temperature: 0,
-      brightness: 0,
-      red: 0,
-      green: 0,
-      blue: 0
-    })
+    location = Location.changeset(%Location{}, %{name: "left", zone: 0})
+      |> Repo.insert!
 
-    # `0` is the fake location identifier, since we only have one
-    # location for now
-    assert %{0 => false} = Status.now
+    waft =
+      Ecto.build_assoc(location, :wafts)
+      |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12000, green: 10000, blue: 0})
+      |> Repo.insert!
+
+    assert Status.now == %{location.id => false}
   end
 end

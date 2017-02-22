@@ -15,6 +15,7 @@ defmodule DoubleRed.Waft do
     field :green, :integer
     field :blue, :integer
 
+    belongs_to :location, DoubleRed.Location
     timestamps()
   end
 
