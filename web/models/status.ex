@@ -68,6 +68,6 @@ defmodule DoubleRed.Status do
   """
   def occupied?(nil), do: raise NoWaftDataError
   def occupied?(waft) do
-    waft.red == 65535
+    waft.red == 65_535
   end
 end

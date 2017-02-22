@@ -1,4 +1,8 @@
 defmodule DoubleRed do
+  @moduledoc """
+  The DoubleRed web application.
+  """
+
   use Application
 
   # See http://elixir-lang.org/docs/stable/elixir/Application.html
@@ -7,24 +11,22 @@ defmodule DoubleRed do
     import Supervisor.Spec
 
     # Define workers and child supervisors to be supervised
+    # Don't start the Slack.Bot app in test since it keeps a persistent
+    # websocket connection
     children = [
       supervisor(DoubleRed.Repo, []),
       supervisor(DoubleRed.Endpoint, []),
       worker(DoubleRed.SlackPresence, [])
-    ]
-
-    # Don't start the Slack.Bot app in test since it keeps a persistent
-    # websocket connection
-    children = children ++ (unless Mix.env == :test do
-        [worker(Slack.Bot, [
-          DoubleRed.SlackRtm,
-          [],
-          Application.get_env(:slack, :api_token),
-          %{name: :slack}
-        ])]
-      else
-        []
-      end)
+    ] ++ (if Mix.env == :test do
+      [worker(Slack.Bot, [
+        DoubleRed.SlackRtm,
+        [],
+        Application.get_env(:slack, :api_token),
+        %{name: :slack}
+      ])]
+    else
+      []
+    end)
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options

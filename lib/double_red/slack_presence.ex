@@ -1,6 +1,11 @@
 require Logger
 
 defmodule DoubleRed.SlackPresence do
+  @moduledoc """
+  Server for updating the connected Slack bot's presence (online status) via
+  the Slack web API.
+  """
+
   use GenServer
 
   def start_link do
