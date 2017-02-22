@@ -17,7 +17,7 @@ defmodule DoubleRed do
     # websocket connection
     children = children ++ (unless Mix.env == :test do
         [worker(Slack.Bot, [
-          SlackRtm,
+          DoubleRed.SlackRtm,
           [],
           Application.get_env(:slack, :api_token),
           %{name: :slack}
