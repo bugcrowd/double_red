@@ -17,7 +17,7 @@ defmodule DoubleRed do
       supervisor(DoubleRed.Repo, []),
       supervisor(DoubleRed.Endpoint, []),
       worker(DoubleRed.SlackPresence, [])
-    ] ++ (if Mix.env == :test do
+    ] ++ (if Mix.env != :test do
       [worker(Slack.Bot, [
         DoubleRed.SlackRtm,
         [],
