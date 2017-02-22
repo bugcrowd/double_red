@@ -7,7 +7,6 @@ defmodule DoubleRed.SlackRtm do
   use Slack
 
   alias Slack.Lookups
-  alias Slack.Sends
 
   @welcome_message ~s"""
     Hi there! Since this is our first conversation, let me tell you a bit about how I work.
@@ -32,7 +31,11 @@ defmodule DoubleRed.SlackRtm do
 
       Logger.info "Sending the welcome message to #{username}"
 
-      send_message_without_attachments @welcome_message, message.channel, slack
+      send_message @welcome_message, message.channel, slack
+
+      if message.text == "status" do
+        send_status message.channel, slack
+      end
     end
 
     {:ok, state}
@@ -48,14 +51,31 @@ defmodule DoubleRed.SlackRtm do
   end
   def handle_info(_, _, state), do: {:ok, state}
 
-  defp send_message_without_attachments(text, channel, slack) do
-    %{
-      type: "message",
-      text: text,
-      channel: channel,
-      attachments: false
+  # Can't send attachments via the RTM API, so this uses the web API
+  defp send_status(channel, slack) do
+    status = DoubleRed.Status.now
+
+    message = "Here's the current status:"
+
+    attachments = Enum.map(status, fn({id, occupied}) ->
+      Logger.debug "#{id} is #{occupied}"
+
+      {text, color} = case occupied do
+        true ->  {"Occupied :disappointed:", "#ff0000"}
+        false -> {"Unoccupied :smile:",      "#00ff00"}
+        _ ->     {"I'm not sure :confused:", "#cccccc"}
+      end
+
+      %{
+        color: color,
+        text: text
+      }
+    end)
+    |> JSX.encode!
+
+    Slack.Web.Chat.post_message channel, message, %{
+      as_user: true,
+      attachments: attachments
     }
-      |> JSX.encode!
-      |> Sends.send_raw(slack)
   end
 end
