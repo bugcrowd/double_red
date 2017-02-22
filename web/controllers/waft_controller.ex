@@ -50,7 +50,7 @@ defmodule DoubleRed.WaftController do
     waft =
       conn.assigns[:location]
       |> assoc(:wafts)
-      |> Repo.get(id)
+      |> Repo.get!(id)
     render(conn, "show.json", waft: waft)
   end
 
@@ -58,7 +58,7 @@ defmodule DoubleRed.WaftController do
     waft =
       conn.assigns[:location]
       |> assoc(:wafts)
-      |> Repo.get(id)
+      |> Repo.get!(id)
     changeset = Waft.changeset(waft, waft_params)
 
     case Repo.update(changeset) do
@@ -75,7 +75,7 @@ defmodule DoubleRed.WaftController do
     waft =
       conn.assigns[:location]
       |> assoc(:wafts)
-      |> Repo.get(id)
+      |> Repo.get!(id)
 
     # Here we use delete! (with a bang) because we expect
     # it to always work (and if it does not, it will raise).
