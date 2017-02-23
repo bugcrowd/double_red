@@ -5,6 +5,8 @@ defmodule DoubleRed.WaftController do
   alias DoubleRed.Location
   alias DoubleRed.Status
 
+  import Ecto.Query, only: [from: 2]
+
   plug :find_location
 
   defp find_location(conn, _opts) do
@@ -13,11 +15,7 @@ defmodule DoubleRed.WaftController do
   end
 
   def index(conn, _params) do
-    wafts =
-      conn.assigns[:location]
-      |> assoc(:wafts)
-      |> Repo.all(order_by: [desc: :inserted_at])
-
+    wafts = Repo.all(from assoc(conn.assigns[:location], :wafts), order_by: [desc: :inserted_at])
     render(conn, "index.json", wafts: wafts)
   end
 
