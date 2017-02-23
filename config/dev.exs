@@ -11,8 +11,12 @@ config :double_red, DoubleRed.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: []
-
+  watchers: [],
+  https: [port: 4001,
+          otp_app: :double_red,
+          keyfile: System.get_env("SSL_KEY_PATH"),
+          certfile: System.get_env("SSL_CRT_PATH")
+          ]
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
 
