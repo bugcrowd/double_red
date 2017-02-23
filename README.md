@@ -24,7 +24,7 @@ curl -X POST \
               "zone": 0
             }
           }' \
-  https://bot.famo.io/api/locations
+  http://localhost:4000/api/locations
 ```
 
 An example response from the locations index might be:
@@ -69,7 +69,7 @@ curl -X POST \
               "brightness": 0
             }
           }' \
-  https://bot.famo.io/api/locations/33ac6da6-970e-4f3e-9be1-4189a3abd18b/wafts
+  http://localhost:4000/api/locations/33ac6da6-970e-4f3e-9be1-4189a3abd18b/wafts
 ```
 
 ### Query the Current Status
@@ -77,7 +77,7 @@ curl -X POST \
 To get the current status of the locations, query the status endpoint.
 
 ```
-curl https://bot.famo.io/api/status
+curl http://localhost:4000/api/status
 ```
 
 This example response displays the left bathroom as occupied and the right as unoccupied:
