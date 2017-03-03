@@ -15,6 +15,7 @@ defmodule DoubleRed.WaftView do
       brightness: waft.brightness,
       red: waft.red,
       green: waft.green,
-      blue: waft.blue}
+      blue: waft.blue,
+      inserted_at: waft.inserted_at}
   end
 end
