@@ -32,12 +32,19 @@ defmodule DoubleRed.Status do
   end
 
   @doc """
-  Get the current occupancy status for all locations.
+  Get the current occupancy status for all zones.
   """
   def now do
-    locations = Repo.all(from Location, order_by: [desc: :inserted_at])
+    Repo.all(from l in Location, order_by: [desc: :inserted_at])
+      |> Enum.map(fn(location) -> %{location.id => %{ status: now(location), name: location.name }} end)
+      |> Enum.reduce(%{}, fn(status, acc) -> Map.merge(acc, status) end)
+  end
 
-    locations
+  @doc """
+  Get the current occupancy status for selected zone.
+  """
+  def now_by_zone(zone) do
+    Repo.all(from l in Location, order_by: [desc: :inserted_at], where: l.zone == ^zone)
       |> Enum.map(fn(location) -> %{location.id => %{ status: now(location), name: location.name }} end)
       |> Enum.reduce(%{}, fn(status, acc) -> Map.merge(acc, status) end)
   end

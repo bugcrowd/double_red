@@ -25,16 +25,15 @@ defmodule DoubleRed.StatusControllerTest do
   test "shows correct response when occupied", %{conn: conn} do
     location = conn.assigns.location
 
-    waft =
-      Ecto.build_assoc(location, :wafts)
-      |> Waft.changeset(%{
-        brightness: 0,
-        temperature: 0,
-        red: 65535,
-        green: 0,
-        blue: 0
-      })
-      |> Repo.insert!
+    Ecto.build_assoc(location, :wafts)
+    |> Waft.changeset(%{
+      brightness: 0,
+      temperature: 0,
+      red: 65535,
+      green: 0,
+      blue: 0
+    })
+    |> Repo.insert!
 
     conn = get conn, status_path(conn, :show)
     assert json_response(conn, 200)["data"] == [%{
@@ -46,16 +45,15 @@ defmodule DoubleRed.StatusControllerTest do
   test "shows correct response when unoccupied", %{conn: conn} do
     location = conn.assigns.location
 
-    waft =
-      Ecto.build_assoc(location, :wafts)
-      |> Waft.changeset(%{
-        brightness: 0,
-        temperature: 0,
-        red: 0,
-        green: 0,
-        blue: 0
-      })
-      |> Repo.insert!
+    Ecto.build_assoc(location, :wafts)
+    |> Waft.changeset(%{
+      brightness: 0,
+      temperature: 0,
+      red: 0,
+      green: 0,
+      blue: 0
+    })
+    |> Repo.insert!
 
     conn = get conn, status_path(conn, :show)
     assert json_response(conn, 200)["data"] == [%{

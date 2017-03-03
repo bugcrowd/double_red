@@ -32,7 +32,7 @@ Double Red
       Logger.info "Sending the welcome message to #{username}"
 
       if message.text == "status" do
-        send_status message.channel, slack
+        send_status message.channel
       else
         send_message @welcome_message, message.channel, slack
       end
@@ -52,8 +52,8 @@ Double Red
   def handle_info(_, _, state), do: {:ok, state}
 
   # Can't send attachments via the RTM API, so this uses the web API
-  defp send_status(channel, slack) do
-    status = DoubleRed.Status.now
+  defp send_status(channel) do
+    status = DoubleRed.Status.now_by_zone(0)
 
     message = "Here's the current status:"
 

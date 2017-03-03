@@ -54,10 +54,9 @@ defmodule DoubleRed.StatusTest do
     location = Location.changeset(%Location{}, %{name: "left", zone: 0})
       |> Repo.insert!
 
-    waft =
-      Ecto.build_assoc(location, :wafts)
-      |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12001, green: 10000, blue: 0})
-      |> Repo.insert!
+    Ecto.build_assoc(location, :wafts)
+    |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12001, green: 10000, blue: 0})
+    |> Repo.insert!
 
     assert Status.now == %{location.id => %{name: "left", status: true}}
   end
@@ -66,10 +65,9 @@ defmodule DoubleRed.StatusTest do
     location = Location.changeset(%Location{}, %{name: "left", zone: 0})
       |> Repo.insert!
 
-    waft =
-      Ecto.build_assoc(location, :wafts)
-      |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12000, green: 10000, blue: 0})
-      |> Repo.insert!
+    Ecto.build_assoc(location, :wafts)
+    |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12000, green: 10000, blue: 0})
+    |> Repo.insert!
 
     assert Status.now == %{location.id => %{name: "left", status: false}}
   end
