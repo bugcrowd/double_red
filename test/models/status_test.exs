@@ -59,7 +59,7 @@ defmodule DoubleRed.StatusTest do
       |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12001, green: 10000, blue: 0})
       |> Repo.insert!
 
-    assert Status.now == %{location.id => true}
+    assert Status.now == %{location.id => %{name: "left", status: true}}
   end
 
   test "#now returns occupied status for all locations, when unoccupied" do
@@ -71,6 +71,6 @@ defmodule DoubleRed.StatusTest do
       |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12000, green: 10000, blue: 0})
       |> Repo.insert!
 
-    assert Status.now == %{location.id => false}
+    assert Status.now == %{location.id => %{name: "left", status: false}}
   end
 end

@@ -17,3 +17,4 @@ erl_crash.dump
 /config/dev.secret.exs
 
 run.sh
+iex.sh

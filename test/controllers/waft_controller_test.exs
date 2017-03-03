@@ -34,7 +34,8 @@ defmodule DoubleRed.WaftControllerTest do
       "brightness" => waft.brightness,
       "red" => waft.red,
       "green" => waft.green,
-      "blue" => waft.blue}
+      "blue" => waft.blue,
+      "inserted_at" => to_string(waft.inserted_at)}
   end
 
   test "renders page not found when id is nonexistent", %{conn: conn} do

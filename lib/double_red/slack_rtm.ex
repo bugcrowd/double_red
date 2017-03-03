@@ -57,13 +57,13 @@ Double Red
 
     message = "Here's the current status:"
 
-    attachments = Enum.map(status, fn({id, occupied}) ->
-      Logger.debug "#{id} is #{occupied}"
+    attachments = Enum.map(status, fn({id, location}) ->
+      Logger.debug "#{id} is #{location[:status]}"
 
-      {text, color} = case occupied do
-        true ->  {"Occupied :disappointed:", "#ff0000"}
-        false -> {"Unoccupied :smile:",      "#00ff00"}
-        _ ->     {"I'm not sure :confused:", "#cccccc"}
+      {text, color} = case location[:status] do
+        true ->  {"#{location[:name]} Occupied :disappointed:", "#ff0000"}
+        false -> {"#{location[:name]} Unoccupied :smile:",      "#00ff00"}
+        _ ->     {"#{location[:name]} I'm not sure :confused:", "#cccccc"}
       end
 
       %{

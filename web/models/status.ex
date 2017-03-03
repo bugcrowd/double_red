@@ -38,7 +38,7 @@ defmodule DoubleRed.Status do
     locations = Repo.all(from Location, order_by: [desc: :inserted_at])
 
     locations
-      |> Enum.map(fn(location) -> %{location.id => now(location)} end)
+      |> Enum.map(fn(location) -> %{location.id => %{ status: now(location), name: location.name }} end)
       |> Enum.reduce(%{}, fn(status, acc) -> Map.merge(acc, status) end)
   end
 
