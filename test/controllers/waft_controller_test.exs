@@ -4,7 +4,16 @@ defmodule DoubleRed.WaftControllerTest do
   alias DoubleRed.Location
   alias DoubleRed.Waft
 
-  @valid_attrs %{blue: 42, green: 42, brightness: 42, red: 42, temperature: 42}
+  @valid_attrs %{
+    blue: 42,
+    green: 42,
+    brightness: 42,
+    red: 42,
+    temperature: 42,
+    battery_adc_level: 700,
+    battery_percentage: 99,
+    wifi_rssi: -55
+  }
   @invalid_attrs %{temperature: -1}
 
   setup %{conn: conn} do
@@ -35,7 +44,11 @@ defmodule DoubleRed.WaftControllerTest do
       "red" => waft.red,
       "green" => waft.green,
       "blue" => waft.blue,
-      "inserted_at" => to_string(waft.inserted_at)}
+      "inserted_at" => to_string(waft.inserted_at),
+      "battery_adc_level" => waft.battery_adc_level,
+      "battery_percentage" => waft.battery_percentage,
+      "wifi_rssi" => waft.wifi_rssi
+    }
   end
 
   test "renders page not found when id is nonexistent", %{conn: conn} do
