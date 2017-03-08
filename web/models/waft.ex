@@ -27,7 +27,16 @@ defmodule DoubleRed.Waft do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:temperature, :brightness, :red, :green, :blue])
+    |> cast(params, [
+                      :temperature,
+                      :brightness,
+                      :red,
+                      :green,
+                      :blue,
+                      :battery_adc_level,
+                      :battery_percentage,
+                      :wifi_rssi
+                    ])
     |> validate_required([:temperature, :brightness, :red, :green, :blue])
     |> check_constraint(:temperature, name: :positive_temperature,
       message: "temperature must be at least 0"
