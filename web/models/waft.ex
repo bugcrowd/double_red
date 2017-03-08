@@ -14,6 +14,9 @@ defmodule DoubleRed.Waft do
     field :red, :integer
     field :green, :integer
     field :blue, :integer
+    field :battery_adc_level, :integer
+    field :battery_percentage, :integer
+    field :wifi_rssi, :integer
 
     belongs_to :location, DoubleRed.Location
     timestamps()

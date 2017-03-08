@@ -16,6 +16,9 @@ defmodule DoubleRed.WaftView do
       red: waft.red,
       green: waft.green,
       blue: waft.blue,
+      battery_percentage: waft.battery_percentage,
+      battery_adc_level: waft.battery_adc_level,
+      wifi_rssi: waft.wifi_rssi,
       inserted_at: to_string(waft.inserted_at)}
   end
 end
