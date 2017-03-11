@@ -55,10 +55,10 @@ defmodule DoubleRed.StatusTest do
       |> Repo.insert!
 
     Ecto.build_assoc(location, :wafts)
-    |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12001, green: 10000, blue: 0})
+    |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12001, green: 10000, blue: 0, battery_percentage: 66})
     |> Repo.insert!
 
-    assert Status.now == %{location.id => %{name: "left", status: true}}
+    assert Status.now == %{location.id => %{name: "left", status: true, battery: 66}}
   end
 
   test "#now returns occupied status for all locations, when unoccupied" do
@@ -66,9 +66,9 @@ defmodule DoubleRed.StatusTest do
       |> Repo.insert!
 
     Ecto.build_assoc(location, :wafts)
-    |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12000, green: 10000, blue: 0})
+    |> Waft.changeset(%{temperature: 0, brightness: 0, red: 12000, green: 10000, blue: 0, battery_percentage: 66})
     |> Repo.insert!
 
-    assert Status.now == %{location.id => %{name: "left", status: false}}
+    assert Status.now == %{location.id => %{name: "left", status: false, battery: 66}}
   end
 end

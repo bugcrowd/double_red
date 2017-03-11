@@ -36,7 +36,12 @@ defmodule DoubleRed.Status do
   """
   def now do
     Repo.all(from l in Location, order_by: [desc: :inserted_at])
-      |> Enum.map(fn(location) -> %{location.id => %{ status: now(location), name: location.name }} end)
+      |> Enum.map(
+          fn(location) -> %{
+              location.id => Map.merge(%{ name: location.name }, now(latest_waft(location)))
+            }
+          end
+        )
       |> Enum.reduce(%{}, fn(status, acc) -> Map.merge(acc, status) end)
   end
 
@@ -45,8 +50,17 @@ defmodule DoubleRed.Status do
   """
   def now_by_zone(zone) do
     Repo.all(from l in Location, order_by: [desc: :inserted_at], where: l.zone == ^zone)
-      |> Enum.map(fn(location) -> %{location.id => %{ status: now(location), name: location.name }} end)
+      |> Enum.map(
+           fn(location) -> %{
+             location.id => Map.merge(%{ name: location.name }, now(latest_waft(location)))
+           }
+           end
+         )
       |> Enum.reduce(%{}, fn(status, acc) -> Map.merge(acc, status) end)
+  end
+
+  def latest_waft(location) do
+    Repo.one(from Ecto.assoc(location, :wafts), order_by: [desc: :inserted_at], limit: 1)
   end
 
   @doc """
@@ -54,11 +68,10 @@ defmodule DoubleRed.Status do
 
   There's only one location at the moment, so it's not super interesting.
   """
-  def now(location) do
-    waft = Repo.one(from Ecto.assoc(location, :wafts), order_by: [desc: :inserted_at], limit: 1)
-    occupied?(waft)
+  def now(waft) do
+    %{ status: occupied?(waft), battery: battery(waft) }
   rescue
-    NoWaftDataError -> nil
+    NoWaftDataError -> %{ status: nil, battery: nil }
   end
 
   @doc """
@@ -68,5 +81,14 @@ defmodule DoubleRed.Status do
   def occupied?(nil), do: raise NoWaftDataError
   def occupied?(waft) do
     waft.red > waft.green * 1.2
+  end
+
+  @doc """
+  Gets battery
+  (i.e., that it's "red").
+  """
+  def battery(nil), do: raise NoWaftDataError
+  def battery(waft) do
+    waft.battery_percentage
   end
 end

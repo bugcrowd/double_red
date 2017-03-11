@@ -18,7 +18,7 @@ defmodule DoubleRed.StatusControllerTest do
     conn = get conn, status_path(conn, :show)
     assert json_response(conn, 200)["data"] == [%{
       "location" => location.id,
-      "occupied" => %{ "name" => "left", "status" => nil }
+      "occupied" => %{ "name" => "left", "status" => nil, "battery" => nil }
     }]
   end
 
@@ -31,14 +31,15 @@ defmodule DoubleRed.StatusControllerTest do
       temperature: 0,
       red: 65535,
       green: 0,
-      blue: 0
+      blue: 0,
+      battery_percentage: 66
     })
     |> Repo.insert!
 
     conn = get conn, status_path(conn, :show)
     assert json_response(conn, 200)["data"] == [%{
       "location" => location.id,
-      "occupied" => %{ "name" => "left", "status" => true }
+      "occupied" => %{ "name" => "left", "status" => true, "battery" => 66 }
     }]
   end
 
@@ -51,14 +52,15 @@ defmodule DoubleRed.StatusControllerTest do
       temperature: 0,
       red: 0,
       green: 0,
-      blue: 0
+      blue: 0,
+      battery_percentage: 66
     })
     |> Repo.insert!
 
     conn = get conn, status_path(conn, :show)
     assert json_response(conn, 200)["data"] == [%{
       "location" => location.id,
-      "occupied" => %{ "name" => "left", "status" => false }
+      "occupied" => %{ "name" => "left", "status" => false, "battery" => 66 }
     }]
   end
 end
