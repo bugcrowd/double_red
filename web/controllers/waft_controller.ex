@@ -30,7 +30,7 @@ defmodule DoubleRed.WaftController do
       {:ok, waft} ->
         GenServer.cast(
           DoubleRed.SlackPresence,
-          {:update, Status.occupied?(waft)}
+          {:update, Status.zone_occupied?(location.zone)}
         )
 
         conn
