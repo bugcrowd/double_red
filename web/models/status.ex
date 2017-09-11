@@ -64,6 +64,25 @@ defmodule DoubleRed.Status do
   end
 
   @doc """
+  See if a zone is completely occupied
+
+  Start off the accumulator with true, if a location isn't occupied ti will
+  return false
+  """
+  def zone_occupied?(zone) do
+    now_by_zone(zone)
+      |> Enum.map_reduce(
+           true,
+           fn(x, acc) -> {
+             elem(x,1).status,
+             elem(x,1).status && acc
+           }
+           end
+         )
+      |> elem(1)
+  end
+
+  @doc """
   Get the current occupancy status for a given location.
 
   There's only one location at the moment, so it's not super interesting.
