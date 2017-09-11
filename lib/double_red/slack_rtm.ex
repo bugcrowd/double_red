@@ -61,8 +61,8 @@ Double Red
       Logger.debug "#{id} is #{location[:status]}"
 
       {text, color} = case location[:status] do
-        true ->  {":arrow_#{location[:name]}: Occupied :disappointed: (battery: #{location[:battery]}%)", "#ff0000"}
-        false -> {"arrow_#{location[:name]}: Unoccupied :smile: (battery: #{location[:battery]}%)",      "#00ff00"}
+        true ->  {":arrow_#{location[:name]}: Occupied :disappointed:", "#ff0000"}
+        false -> {"arrow_#{location[:name]}: Unoccupied :smile:",      "#00ff00"}
         _ ->     {":arrow_#{location[:name]}: I'm not sure :confused:", "#cccccc"}
       end
 
