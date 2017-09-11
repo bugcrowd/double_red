@@ -31,7 +31,7 @@ Double Red
 
       Logger.info "Sending the welcome message to #{username}"
 
-      if message.text == "status" do
+      if String.downcase(message.text) == "status" do
         send_status message.channel
       else
         send_message @welcome_message, message.channel, slack
@@ -62,7 +62,7 @@ Double Red
 
       {text, color} = case location[:status] do
         true ->  {":arrow_#{location[:name]}: Occupied :disappointed:", "#ff0000"}
-        false -> {"arrow_#{location[:name]}: Unoccupied :smile:",      "#00ff00"}
+        false -> {":arrow_#{location[:name]}: Unoccupied :smile:",      "#00ff00"}
         _ ->     {":arrow_#{location[:name]}: I'm not sure :confused:", "#cccccc"}
       end
 
