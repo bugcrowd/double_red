@@ -6,7 +6,7 @@ config :double_red, DoubleRed.Endpoint,
   http: [port: {:system, "PORT"}],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   secret_key_base: System.get_env("SECRET_KEY_BASE"),
-  url: [host: "double-red.herokuapp.com"]
+  url: [host: "doublered.herokuapp.com"]
 
 config :double_red, DoubleRed.Repo,
   adapter: Ecto.Adapters.Postgres,
