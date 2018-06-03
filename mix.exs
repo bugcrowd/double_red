@@ -30,13 +30,13 @@ defmodule DoubleRed.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.2.1"},
+    [{:phoenix, "~> 1.3.0"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.0"},
      {:postgrex, ">= 0.0.0"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
-     {:slack, "~> 0.10.0"},
+     {:slack, "~> 0.12.0"},
      {:credo, "~> 0.5", only: [:dev, :test]}]
   end
 
