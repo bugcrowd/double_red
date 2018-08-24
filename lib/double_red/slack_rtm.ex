@@ -71,7 +71,7 @@ Double Red
         text: text
       }
     end)
-    |> Poison.encode
+    |> Poison.encode!
 
     Slack.Web.Chat.post_message channel, message, %{
       as_user: true,
